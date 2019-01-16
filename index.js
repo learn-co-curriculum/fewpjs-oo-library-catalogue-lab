@@ -1,6 +1,36 @@
+class Library {
+  constructor( catalog ) {
+    this._catalog = catalog
+  }
+
+  get catalog() {
+    return this._catalog
+  }
+
+  get authors() {
+    return [ ...new Set( this.catalog.books.map( book => book.author ) ) ]
+  }
+
+  get genres() {
+    return [ ...new Set( this.catalog.books.map( book => book.genre ) ) ]
+  }
+
+
+  searchByAuthor( authorName ) {
+    return this.catalog.books.filter( book => book.author.name.includes( authorName ) )
+  }
+
+  searchByGenre( genre ) {
+    return this.catalog.books.filter( book => book.genre === genre )
+  }
+
+  searchByBookTitle( title ) {
+    return this.catalog.books.filter( book => book.info.title.toLowerCase().includes( title.toLowerCase() ) )
+  }
+}
+
 class Catalog {
-  constructor( libraryName, books = [] ) {
-    this._libraryName = libraryName
+  constructor( books = [] ) {
     this._books = books
   }
 
@@ -12,32 +42,13 @@ class Catalog {
     return this._books
   }
 
-  get authors() {
-    return [ ...new Set( this._books.map( book => book.author ) ) ]
-  }
-
-  get genres() {
-    return [ ...new Set( this._books.map( book => book.genre ) ) ]
-  }
-
-  searchByAuthor( authorName ) {
-    return this.books.filter( book => book.author.name.includes( authorName ) )
-  }
-
-  searchByGenre( genre ) {
-    return this.books.filter( book => book.genre === genre )
-  }
-
-  searchByBookTitle( title ) {
-    return this.books.filter( book => book.title.includes( title ) )
-  }
 }
 
 class Book {
-  constructor( title, author, genre ) {
-    this._title = title
+  constructor( author, genre, publishingInfo ) {
     this._author = author
     this._genre = genre
+    this._publishingInfo = publishingInfo
   }
 
   get author() {
@@ -48,8 +59,28 @@ class Book {
     return this._genre
   }
 
+  get info() {
+    return this._publishingInfo
+  }
+}
+
+class PublishingInfo {
+  constructor( title, date, publisher ) {
+    this._title = title
+    this._date = date
+    this._publisher = publisher
+  }
+
   get title() {
     return this._title
+  }
+
+  get publisher() {
+    return this._publisher
+  }
+
+  get date() {
+    return this._date
   }
 }
 
@@ -64,7 +95,11 @@ class Author {
 }
 
 class Genre {
-  constructor( name ) {
-    this._name = name
+  constructor( title ) {
+    this._title = title
+  }
+
+  get title() {
+    return this._title
   }
 }
